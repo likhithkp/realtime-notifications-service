@@ -36,7 +36,7 @@ A real-time notification system built using Kafka, Redis, PostgreSQL, and WebSoc
 
 4️⃣ **Real-time Notification Delivery**  
    - WebSockets **push real-time notifications** to actively connected clients.  
-   - If a user **views a notification live**, it is marked as **read** immediately in Redis and PostgreSQL.
+   - If a user **views a notification live**, it is marked as **read** immediately in PostgreSQL and skips redis.
 
 5️⃣ **Manual Read Acknowledgment**  
    - Users can manually mark notifications as **read** via an API.  
