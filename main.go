@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"realtime-notifications-service/config"
 	"realtime-notifications-service/handler"
+	"realtime-notifications-service/redisclient"
+	"realtime-notifications-service/services"
 
 	"github.com/joho/godotenv"
 )
@@ -18,7 +20,14 @@ func main() {
 	config.ConnectDB()
 	defer config.CloseDB()
 
-	http.HandleFunc("/createUser", handler.CreateUser)
-	http.HandleFunc("/createNotification", handler.ProduceNotification)
+	redisClient := redisclient.GetRedisClient()
+	defer redisClient.Close()
+
+	go services.ListenNotificationEvents("localhost:9092", "notificationsGroup", "notifications")
+
+	http.HandleFunc("POST /createUser", handler.CreateUser)
+	http.HandleFunc("POST /createNotification", handler.ProduceNotification)
+	http.HandleFunc("GET /notifications/{user_id}", handler.GetNotifications)
+	http.HandleFunc("/ws/{user_id}", handler.GetLiveNotifications)
 	http.ListenAndServe(":3000", nil)
 }

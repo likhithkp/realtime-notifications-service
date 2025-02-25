@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"realtime-notifications-service/kafka"
+	"realtime-notifications-service/services"
 )
 
 type Notification struct {
@@ -36,7 +36,7 @@ func ProduceNotification(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = kafka.PublishEvent("notifications", "notification", byteData, "localhost:9092")
+	err = services.PublishNotificationEvent("notifications", "notification", byteData, "localhost:9092")
 	if err != nil {
 		log.Printf("Failed to publish event: %v\n", err)
 		http.Error(w, "Failed to publish notification", http.StatusInternalServerError)
