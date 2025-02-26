@@ -29,5 +29,6 @@ func main() {
 	http.HandleFunc("POST /createNotification", handler.ProduceNotification)
 	http.HandleFunc("GET /notifications/{user_id}", handler.GetNotifications)
 	http.HandleFunc("/ws/{user_id}", handler.GetLiveNotifications)
+	http.HandleFunc("PATCH /notifications/{user_id}/{notification_id}/read", handler.MarkNotificationAsRead)
 	http.ListenAndServe(":3000", nil)
 }
